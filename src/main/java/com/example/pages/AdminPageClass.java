@@ -1,6 +1,7 @@
 package com.example.pages;
 
 import java.util.List;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -55,15 +56,14 @@ public class AdminPageClass extends BaseClass {
     @FindBy(xpath = "//button[contains(.,'Cancel')]")
     WebElement cancelBtn;
 
-    @FindBy(xpath = "//div[contains(.,'Admin123456')]")
-    WebElement addedUser;
-
     By firstSuggestion = By.xpath("(//div[contains(@class,'oxd-autocomplete-option')])[1]");
 
     By noRecords = By.xpath("//span[contains(.,'No Records Found')]");
 
+    By successToast = By.xpath("//div[contains(@class,'oxd-toast-content')]//p[contains(.,'Successfully Saved')]");
+
     public AdminPageClass() {
-        PageFactory.initElements(driver, this);
+        PageFactory.initElements(getDriver(), this);
     }
 
     public boolean verifyText(String expText) {
@@ -89,7 +89,8 @@ public class AdminPageClass extends BaseClass {
             return false;
         }
         // stores all the search result of employee name in option list
-        List<WebElement> options = driver.findElements(By.xpath("//div[contains(@class,'oxd-autocomplete-option')]"));
+        List<WebElement> options = getDriver()
+                .findElements(By.xpath("//div[contains(@class,'oxd-autocomplete-option')]"));
         if (options.isEmpty()) {
             System.out.println("Employee Doesn't Exist");
             return false;
@@ -125,7 +126,8 @@ public class AdminPageClass extends BaseClass {
             return false;
 
         Thread.sleep(2000);// waith for 2 sec for result to load for employee name
-        List<WebElement> options = driver.findElements(By.xpath("//div[contains(@class,'oxd-autocomplete-option')]"));
+        List<WebElement> options = getDriver()
+                .findElements(By.xpath("//div[contains(@class,'oxd-autocomplete-option')]"));
         if (options.isEmpty()) {
             System.out.println("Employee Doesn't Exist");
             return false;
@@ -146,7 +148,14 @@ public class AdminPageClass extends BaseClass {
             return false;
 
         ActionDriver.buttonAction(saveBtn);
-        return ActionDriver.isElementPresent(addedUser);
+        return ActionDriver.waitForText(successToast, "Successfully Saved");
+
+    }
+
+    public boolean verifyAddUserValidationForBlankForm() {
+        ActionDriver.buttonAction(addBtn);
+        ActionDriver.buttonAction(saveBtn);
+        return getDriver().findElements(By.xpath("//span[text()='Required']")).size() >= 4;
 
     }
 

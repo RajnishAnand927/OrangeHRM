@@ -21,8 +21,14 @@ public class LoginPageClass extends BaseClass {
     @FindBy(xpath = "//button[@type='submit']")
     WebElement logInBtn;
 
+    @FindBy(xpath = "//p[contains(@class,'oxd-alert-content-text')]")
+    WebElement invalidCredentialsMsg;
+
+    @FindBy(xpath = "//span[text()='Required']")
+    java.util.List<WebElement> requiredMessages;
+
     public LoginPageClass() {
-        PageFactory.initElements(driver, this);
+        PageFactory.initElements(getDriver(), this);
     }
 
     public boolean verifyTitle(String expTitle) {
@@ -43,6 +49,20 @@ public class LoginPageClass extends BaseClass {
             System.out.println("Username or password input failed");
         }
         return new DashboardPageClass();
+    }
+
+    public void submitLogin(String email, String pwd) {
+        ActionDriver.inputData(username, email);
+        ActionDriver.inputData(password, pwd);
+        ActionDriver.buttonAction(logInBtn);
+    }
+
+    public boolean verifyInvalidCredentialsMessage() {
+        return "Invalid credentials".equals(ActionDriver.fetchEleText(invalidCredentialsMsg));
+    }
+
+    public boolean verifyRequiredMessagesCount(int expectedCount) {
+        return requiredMessages.size() == expectedCount;
     }
 
 }

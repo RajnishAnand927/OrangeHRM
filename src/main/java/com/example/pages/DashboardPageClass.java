@@ -15,7 +15,7 @@ public class DashboardPageClass extends BaseClass {
     WebElement adminBtn;
 
     public DashboardPageClass() {
-        PageFactory.initElements(driver, this);
+        PageFactory.initElements(getDriver(), this);
     }
 
     public boolean verifyTitle(String expTitle) {

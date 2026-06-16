@@ -16,7 +16,7 @@ public class ActionDriver extends BaseClass {
     public static WebElement waitForVisibility(
             WebElement ele) {
         WebDriverWait wait = new WebDriverWait(
-                driver,
+                getDriver(),
                 Duration.ofSeconds(10));
         return wait.until(
                 ExpectedConditions.visibilityOf(ele));
@@ -25,15 +25,15 @@ public class ActionDriver extends BaseClass {
     public static WebElement waitForClickable(
             WebElement ele) {
         WebDriverWait wait = new WebDriverWait(
-                driver,
+                getDriver(),
                 Duration.ofSeconds(10));
         return wait.until(
                 ExpectedConditions.elementToBeClickable(ele));
     }
 
     public static String fetchTitle() {
-        if (driver != null)
-            return driver.getTitle();
+        if (getDriver() != null)
+            return getDriver().getTitle();
         else
             return null;
     }
@@ -102,7 +102,7 @@ public class ActionDriver extends BaseClass {
             By locator) {
 
         try {
-            driver.findElement(locator);
+            getDriver().findElement(locator);
             return true;
         } catch (Exception e) {
             return false;
@@ -125,13 +125,32 @@ public class ActionDriver extends BaseClass {
             By locator) {
 
         WebDriverWait wait = new WebDriverWait(
-                driver,
+                getDriver(),
                 Duration.ofSeconds(10));
 
         return wait.until(
                 ExpectedConditions
                         .visibilityOfElementLocated(
                                 locator));
+    }
+
+    public static boolean waitForText(
+            By locator,
+            String expectedText) {
+
+        try {
+            WebDriverWait wait = new WebDriverWait(
+                    getDriver(),
+                    Duration.ofSeconds(10));
+
+            return wait.until(
+                    ExpectedConditions
+                            .textToBePresentInElementLocated(
+                                    locator,
+                                    expectedText));
+        } catch (Exception e) {
+            return false;
+        }
     }
 
 }

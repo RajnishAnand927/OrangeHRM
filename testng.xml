@@ -6,18 +6,70 @@
     <parameter name="browser" value="chrome"/>
     
 
-    <!-- <test name="Login Tests">
+    <test name="Smoke Tests">
         <parameter name="url" value="https://opensource-demo.orangehrmlive.com/web/index.php/auth/login"/>
+        <groups>
+            <run>
+                <include name="smoke"/>
+            </run>
+        </groups>
         <classes>
             <class name="com.example.testcases.LoginPageTestCases"/>
-        </classes>
-    </test> -->
-    <test name="Admin Test">
-        <parameter name="url" value="https://opensource-demo.orangehrmlive.com/web/index.php/auth/login"/>
-        <classes>
             <class name="com.example.testcases.AdminPageTestCases"/>
         </classes>
-    
+    </test>
+
+    <test name="Regression Tests">
+        <parameter name="url" value="https://opensource-demo.orangehrmlive.com/web/index.php/auth/login"/>
+        <groups>
+            <run>
+                <include name="regression"/>
+            </run>
+        </groups>
+        <classes>
+            <class name="com.example.testcases.LoginPageTestCases"/>
+            <class name="com.example.testcases.AdminPageTestCases"/>
+        </classes>
+    </test>
+
+    <test name="Valid Test Cases">
+        <parameter name="url" value="https://opensource-demo.orangehrmlive.com/web/index.php/auth/login"/>
+        <groups>
+            <run>
+                <include name="valid"/>
+            </run>
+        </groups>
+        <classes>
+            <class name="com.example.testcases.LoginPageTestCases"/>
+            <class name="com.example.testcases.AdminPageTestCases"/>
+        </classes>
+    </test>
+
+    <test name="Invalid Test Cases">
+        <parameter name="url" value="https://opensource-demo.orangehrmlive.com/web/index.php/auth/login"/>
+        <groups>
+            <run>
+                <include name="invalid"/>
+            </run>
+        </groups>
+        <classes>
+            <class name="com.example.testcases.LoginPageTestCases"/>
+            <class name="com.example.testcases.AdminPageTestCases"/>
+        </classes>
+    </test>
+
+    <test name="Parallel Execution Demo" parallel="methods" thread-count="2">
+        <parameter name="url" value="https://opensource-demo.orangehrmlive.com/web/index.php/auth/login"/>
+        <classes>
+            <class name="com.example.testcases.ParallelExecutionTestCases"/>
+        </classes>
+    </test>
+
+    <test name="Chrome Edge Parallel Test">
+        <parameter name="url" value="https://opensource-demo.orangehrmlive.com/web/index.php/auth/login"/>
+        <classes>
+            <class name="com.example.testcases.CrossBrowserParallelTestCases"/>
+        </classes>
     </test>
 
 </suite>

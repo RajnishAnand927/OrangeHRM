@@ -9,31 +9,41 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 
 public class BaseClass {
     public static WebDriver driver;
+    private static final ThreadLocal<WebDriver> threadLocalDriver = new ThreadLocal<>();
 
     public static void setup(String browser, String url) {
+        WebDriver webDriver;
         switch (browser.toLowerCase()) {
             case "chrome":
-                driver = new ChromeDriver();
+                webDriver = new ChromeDriver();
                 break;
             case "edge":
-                driver = new EdgeDriver();
+                webDriver = new EdgeDriver();
                 break;
             case "firefox":
-                driver = new FirefoxDriver();
+                webDriver = new FirefoxDriver();
                 break;
             default:
-                System.out.println("Invalid Browser Name");
-                break;
+                throw new IllegalArgumentException("Invalid Browser Name: " + browser);
         }
-        driver.manage().window().maximize();
-        driver.manage().deleteAllCookies();
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(6));
-        driver.get(url);
+        threadLocalDriver.set(webDriver);
+        driver = webDriver;
+        getDriver().manage().window().maximize();
+        getDriver().manage().deleteAllCookies();
+        getDriver().manage().timeouts().implicitlyWait(Duration.ofSeconds(6));
+        getDriver().get(url);
+    }
+
+    public static WebDriver getDriver() {
+        return threadLocalDriver.get() != null ? threadLocalDriver.get() : driver;
     }
 
     public static void tearDown() {
-        if (driver != null) {
-            driver.quit();
+        WebDriver webDriver = getDriver();
+        if (webDriver != null) {
+            webDriver.quit();
+            threadLocalDriver.remove();
+            driver = null;
         }
     }
 
